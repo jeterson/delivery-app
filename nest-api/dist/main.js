@@ -1,9 +1,26 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@nestjs/core");
+const microservices_1 = require("@nestjs/microservices");
 const app_module_1 = require("./app.module");
+const kafkaConfig = {
+    transport: microservices_1.Transport.KAFKA,
+    options: {
+        client: {
+            clientId: process.env.KAFKA,
+            brokers: [process.env.KAFKA_BROKER]
+        },
+        consumer: {
+            groupId: !process.env.KAFKA_CONSUMER_GROUP_ID ||
+                process.env.KAFKA_CONSUMER_GROUP_ID === ''
+                ? 'my-consumer-' + Math.random() : process.env.KAFKA_CONSUMER_GROUP_ID
+        }
+    }
+};
 async function bootstrap() {
-    const app = await core_1.NestFactory.create(app_module_1.AppModule);
+    const app = await core_1.NestFactory.create(app_module_1.AppModule, { cors: true });
+    app.connectMicroservice(kafkaConfig);
+    await app.startAllMicroservices();
     await app.listen(3000);
 }
 bootstrap();

@@ -4,6 +4,7 @@ services:
   app:
     build: .
     container_name: simulator
+    entrypoint: ./.docker/entrypoint.sh
     volumes:
       - .:/go/src/
     extra_hosts:

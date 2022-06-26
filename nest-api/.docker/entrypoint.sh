@@ -1,5 +1,9 @@
 #!/bin/bash
 
-yarn install
+if [ ! -f ".env" ]; then
+  cp .env.example .env
+fi
 
-yarn run start:dev
+npm install
+
+npm run start:dev

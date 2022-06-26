@@ -54,3 +54,8 @@ yarn-error.log
 /benchmarks/memory
 build/config\.gypi
 
+.docker/dbdata
+.history/
+
+.env
+
